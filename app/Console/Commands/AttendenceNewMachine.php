@@ -39,8 +39,10 @@ class AttendenceNewMachine extends Command
             // Fetch attendance data
             $attendanceData = $device->getAttendance();
 
-            $lastAttnLogDate = AttnLog::orderBy('attendance_date', 'desc')->value('attendance_date');
 
+            $lastAttnLogDate = AttnLog::where('entry_type', 'Machine')
+            ->orderBy('entry_time', 'desc')
+            ->value('attendance_date');
 
 
             if (!empty($attendanceData)) {
