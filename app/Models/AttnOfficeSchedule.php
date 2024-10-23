@@ -26,4 +26,5 @@ class AttnOfficeSchedule extends Model
         'movement_status',
         'short_movement_status',
     ];
+    public $timestamps = false;
 }

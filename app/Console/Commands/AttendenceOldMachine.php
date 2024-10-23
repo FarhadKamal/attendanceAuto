@@ -36,14 +36,25 @@ class AttendenceOldMachine extends Command
         $device = new ZKTeco('192.168.1.176', 4370);
 
         if ($device->connect()) {
-            // Fetch attendance data
+
             $attendanceData = $device->getAttendance();
 
             // dd($attendanceData);
-
             $lastAttnLogDate = AttnLog::where('entry_type', 'Machine')
-            ->orderBy('entry_time', 'desc')
-            ->value('attendance_date');
+                ->where('ip_address', '192.168.1.176')
+                ->orderBy('attendance_date', 'desc')
+                ->value('attendance_date');
+
+            // $lastAttnLogDate = AttnLog::where('entry_type', 'Machine')
+            //     ->select('employee_id', 'attendance_date')
+            //     ->orderBy('attendance_date', 'desc')
+            //     ->get()
+            //     ->groupBy('employee_id')
+            //     ->map(function ($group) {
+            //         return $group->first()->attendance_date;
+            //     });
+
+
 
 
             if (!empty($attendanceData)) {
@@ -52,11 +63,20 @@ class AttendenceOldMachine extends Command
                     $userId = $record['id'];
                     $timestamp = $record['timestamp'];
                     $date = date('Y-m-d', strtotime($timestamp));
-                    if ($date >= $lastAttnLogDate) {
+                    // if (isset($lastAttnLogDates[$userId])) {
+
+                    //     if ($date > $lastAttnLogDate[$userId]) {
+                    //         $groupedData[$userId][$date][] = $timestamp;
+                    //     }
+                    // } else {
+
+                    //     $groupedData[$userId][$date][] = $timestamp;
+                    // }
+
+                    if (is_null($lastAttnLogDate) || $date > $lastAttnLogDate) {
 
                         $groupedData[$userId][$date][] = $timestamp;
                     }
-
 
                     // $groupedData[$userId][$date][] = $timestamp;
                 }
@@ -64,7 +84,9 @@ class AttendenceOldMachine extends Command
 
                 foreach ($groupedData as $userId => $dates) {
 
+
                     foreach ($dates as $date => $timestamps) {
+
 
                         foreach ($timestamps as $timestamp) {
                             $punchTime = date('H:i:s', strtotime($timestamp));
@@ -103,15 +125,18 @@ class AttendenceOldMachine extends Command
                     'employee_id' => $userId,
                     'punch_time' => $punchTime,
                     'entry_time' => now(),
-                    'ip_address' => "192.168.0.176",
+                    'entry_type' => "Machine",
+                    'created_by' => "bot",
+                    'ip_address' => "192.168.1.176",
+                    'reference_no' => ' ',
+                    'file_name' => ' ',
                     'attendance_date' => $date,
                 ]);
             } else {
                 $inserted = null;
             }
 
-            if(!empty($inserted))
-            {
+            if (!empty($inserted)) {
                 $loc_id = $inserted->id;
                 $this->insertAttendance($userId, $punchTime, $date, $loc_id);
             }
@@ -131,11 +156,20 @@ class AttendenceOldMachine extends Command
             $existingLog = AttnOfficeInOutLog::where('employee_id', $userId)->whereDate('attendance_date', $date)->first();
             if ($existingLog) {
                 $earlyoutTime = $this->calculateEarlyOutTime($userId, $date);
-                $existingLog->update([
-                    'out_time' => $punchTime,
-                    'early_out_minute' => $earlyoutTime,
-                    'out_time_loc_id' => $loc_id,
-                ]);
+                DB::table('attn_office_in_out_log')
+                    ->where('employee_id', $userId)
+                    ->whereDate('attendance_date', $date) // Ensure correct date format
+                    ->update([
+                        'out_time' => $punchTime,
+                        'early_out_minute' => $earlyoutTime,
+                        'out_time_loc_id' => $loc_id,
+                    ]);
+
+                // $existingLog->update([
+                //     'out_time' => $punchTime,
+                //     'early_out_minute' => $earlyoutTime,
+                //     'out_time_loc_id' => $loc_id,
+                // ]);
             } else {
                 $lateTime = $this->calculateLateTime($userId, $date);
                 AttnOfficeInOutLog::Create([
@@ -143,7 +177,10 @@ class AttendenceOldMachine extends Command
                     'attendance_date' => $date,
                     'in_time' => $punchTime,
                     'late_in_minute' => $lateTime,
-                    'in_time_loc_id' => $loc_id
+                    'in_time_loc_id' => $loc_id,
+                    'out_time' => $punchTime,
+                    'early_out_minute' => 0,
+                    'out_time_loc_id' => $loc_id,
                 ]);
             }
         } catch (\Exception $e) {

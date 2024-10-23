@@ -23,4 +23,5 @@ class AttnLog extends Model
         'reference_no',
         'file_name'
     ];
+    public $timestamps = false;
 }

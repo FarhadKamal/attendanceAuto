@@ -20,4 +20,10 @@ class AttnOfficeInOutLog extends Model
         'out_time_loc_id',
 
     ];
+
+
+
+
+    public $incrementing = false;
+    public $timestamps = false;
 }
