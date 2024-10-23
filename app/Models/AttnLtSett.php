@@ -27,4 +27,5 @@ class AttnLtSett extends Model
         'last_update_date',
         'is_active'
     ];
+    public $timestamps = false;
 }
