@@ -39,13 +39,9 @@ class AttendenceNewMachine extends Command
             // Fetch attendance data
             $attendanceData = $device->getAttendance();
 
-            // dd($attendanceData);
-
             $lastAttnLogDate = AttnLog::orderBy('attendance_date', 'desc')->value('attendance_date');
-            // $startDate = '2023-10-20';
-            // $endDate = '2024-10-22';
 
-            // $this->zktService->deleteAttendanceData($startDate,$endDate);
+
 
             if (!empty($attendanceData)) {
                 $groupedData = [];
@@ -104,7 +100,7 @@ class AttendenceNewMachine extends Command
                     'employee_id' => $userId,
                     'punch_time' => $punchTime,
                     'entry_time' => now(),
-                    'ip_address' => "192.168.0.153",
+                    'ip_address' => "192.168.0.155",
                     'attendance_date' => $date,
                 ]);
             } else {
