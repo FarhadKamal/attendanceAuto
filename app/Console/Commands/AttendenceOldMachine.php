@@ -41,11 +41,10 @@ class AttendenceOldMachine extends Command
 
             // dd($attendanceData);
 
-            $lastAttnLogDate = AttnLog::orderBy('attendance_date', 'desc')->value('attendance_date');
-            // $startDate = '2023-10-20';
-            // $endDate = '2024-10-22';
+            $lastAttnLogDate = AttnLog::where('entry_type', 'Machine')
+            ->orderBy('entry_time', 'desc')
+            ->value('attendance_date');
 
-            // $this->zktService->deleteAttendanceData($startDate,$endDate);
 
             if (!empty($attendanceData)) {
                 $groupedData = [];
