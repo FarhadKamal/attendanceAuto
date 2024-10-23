@@ -15,9 +15,9 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         // $schedule->command('fetch:attendance-get')->everyMinute()
         // ->between('09:00', '19:00');
-        $schedule->command('fetch:attendence-new-155')->everyTenMinutes()
+        $schedule->command('fetch:attendence-new-155')->everyFifteenMinutes()
         ->between('09:00', '19:00');
-        $schedule->command('fetch:attendence-old-176')->everyFifteenMinutes()
+        $schedule->command('fetch:attendence-old-176')->everyTenMinutes()
         ->between('09:00', '19:00');
         // $schedule->command('fetch:attendance-get')->cron('20 9 * * *'); // 9:20 AM
         // $schedule->command('fetch:attendance-get')->cron('20 10 * * *'); // 10:20 AM
