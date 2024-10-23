@@ -21,7 +21,7 @@ class AttendenceNewMachine extends Command
      *
      * @var string
      */
-    protected $signature = 'fetch:attendence-new-155';
+    protected  $signature = 'fetch:attendance {ip} {port=4370}';
 
     /**
      * The console command description.
@@ -32,8 +32,10 @@ class AttendenceNewMachine extends Command
 
     public function handle()
     {
+        $ip = $this->argument('ip'); // Get the IP address from the command
+        $port = $this->argument('port');
 
-        $device = new ZKTeco('192.168.1.155', 4370);
+        $device = new ZKTeco($ip, $port);
 
         if ($device->connect()) {
             // Fetch attendance data
@@ -41,7 +43,7 @@ class AttendenceNewMachine extends Command
 
 
             $lastAttnLogDate = AttnLog::where('entry_type', 'Machine')
-            ->where('ip_address', '192.168.1.176')
+            ->where('ip_address', $ip)
             ->orderBy('attendance_date', 'desc')
             ->value('attendance_date');
 
@@ -90,7 +92,7 @@ class AttendenceNewMachine extends Command
 
                         foreach ($timestamps as $timestamp) {
                             $punchTime = date('H:i:s', strtotime($timestamp));
-                            $inserted = $this->insertAttnLog($userId, $punchTime, $date);
+                            $inserted = $this->insertAttnLog($userId, $punchTime, $date,$ip);
                             // if ($inserted) {
                             //     // $device->clearAttendance();
                             // } else {
@@ -108,7 +110,7 @@ class AttendenceNewMachine extends Command
         }
     }
 
-    private function insertAttnLog($userId, $punchTime, $date)
+    private function insertAttnLog($userId, $punchTime, $date,$ip)
     {
 
 
@@ -128,7 +130,7 @@ class AttendenceNewMachine extends Command
                     'entry_time' => now(),
                     'entry_type' => "Machine",
                     'created_by' => "bot",
-                    'ip_address' => "192.168.1.155",
+                    'ip_address' => $ip,
                     'reference_no' => ' ',
                     'file_name' => ' ',
                     'attendance_date' => $date,
