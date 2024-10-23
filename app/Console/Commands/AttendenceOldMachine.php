@@ -104,7 +104,7 @@ class AttendenceOldMachine extends Command
                     'employee_id' => $userId,
                     'punch_time' => $punchTime,
                     'entry_time' => now(),
-                    'ip_address' => "192.168.0.153",
+                    'ip_address' => "192.168.0.176",
                     'attendance_date' => $date,
                 ]);
             } else {
