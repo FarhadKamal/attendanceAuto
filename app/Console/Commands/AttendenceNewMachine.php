@@ -42,19 +42,19 @@ class AttendenceNewMachine extends Command
             $attendanceData = $device->getAttendance();
 
 
-            $lastAttnLogDate = AttnLog::where('entry_type', 'Machine')
-            ->where('ip_address', $ip)
-            ->orderBy('attendance_date', 'desc')
-            ->value('attendance_date');
-
             // $lastAttnLogDate = AttnLog::where('entry_type', 'Machine')
-            //     ->select('employee_id', 'attendance_date')
-            //     ->orderBy('attendance_date', 'desc')
-            //     ->get()
-            //     ->groupBy('employee_id')
-            //     ->map(function ($group) {
-            //         return $group->first()->attendance_date; // Get the most recent date for each employee
-            //     });
+            // ->where('ip_address', $ip)
+            // ->orderBy('attendance_date', 'desc')
+            // ->value('attendance_date');
+
+            $lastAttnLogDate = AttnLog::where('entry_type', 'Machine')
+                ->select('employee_id', 'attendance_date')
+                ->orderBy('attendance_date', 'desc')
+                ->get()
+                ->groupBy('employee_id')
+                ->map(function ($group) {
+                    return $group->first()->attendance_date; // Get the most recent date for each employee
+                });
 
 
 
@@ -65,20 +65,20 @@ class AttendenceNewMachine extends Command
                     $timestamp = $record['timestamp'];
                     $date = date('Y-m-d', strtotime($timestamp));
 
-                    // if (isset($lastAttnLogDates[$userId])) {
-                    //     // Only consider records with a date after the user's last attendance log date
-                    //     if ($date > $lastAttnLogDate[$userId]) {
-                    //         $groupedData[$userId][$date][] = $timestamp; // Group by user and date
-                    //     }
-                    // } else {
-                    //     // If the user has no previous attendance logs, include their current records
-                    //     $groupedData[$userId][$date][] = $timestamp;
-                    // }
+                    if (isset($lastAttnLogDates[$userId])) {
 
-                    if (is_null($lastAttnLogDate) || $date > $lastAttnLogDate) {
-
+                        if ($date >= $lastAttnLogDate[$userId]) {
+                            $groupedData[$userId][$date][] = $timestamp; // Group by user and date
+                        }
+                    } else {
+                        // If the user has no previous attendance logs, include their current records
                         $groupedData[$userId][$date][] = $timestamp;
                     }
+
+                    // if (is_null($lastAttnLogDate) || $date > $lastAttnLogDate) {
+
+                    //     $groupedData[$userId][$date][] = $timestamp;
+                    // }
 
 
                     // $groupedData[$userId][$date][] = $timestamp;
