@@ -32,9 +32,22 @@ class AttendenceNewMachine extends Command
 
     public function handle()
     {
+
+
         $ip = $this->argument('ip'); // Get the IP address from the command
         $port = $this->argument('port');
-
+        $createdBy = '';
+        switch ($ip) {
+            case '192.168.0.70':
+                $createdBy = 'bot70';
+                break;
+            case '192.168.0.134':
+                $createdBy = 'bot134';
+                break;
+            default:
+                $createdBy = 'bot';
+                break;
+        }
         $device = new ZKTeco($ip, $port);
 
         if ($device->connect()) {
@@ -92,7 +105,7 @@ class AttendenceNewMachine extends Command
 
                         foreach ($timestamps as $timestamp) {
                             $punchTime = date('H:i:s', strtotime($timestamp));
-                            $inserted = $this->insertAttnLog($userId, $punchTime, $date,$ip);
+                            $inserted = $this->insertAttnLog($userId, $punchTime, $date,$ip,$createdBy);
                             // if ($inserted) {
                             //     // $device->clearAttendance();
                             // } else {
@@ -105,12 +118,15 @@ class AttendenceNewMachine extends Command
                 $device->disconnect();
                 $this->info('Attendance log fetched and stored successfully.');
             }
+            else{
+                $this->info('Attendance log Not found.');
+            }
         } else {
             $this->error('Failed to connect to ZKT device.');
         }
     }
 
-    private function insertAttnLog($userId, $punchTime, $date,$ip)
+    private function insertAttnLog($userId, $punchTime, $date,$ip,$createdBy)
     {
 
 
@@ -129,7 +145,7 @@ class AttendenceNewMachine extends Command
                     'punch_time' => $punchTime,
                     'entry_time' => now(),
                     'entry_type' => "Machine",
-                    'created_by' => "bot",
+                    'created_by' => $createdBy,
                     'ip_address' => $ip,
                     'reference_no' => ' ',
                     'file_name' => ' ',
