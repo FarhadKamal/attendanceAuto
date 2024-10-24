@@ -14,11 +14,12 @@ class FetchZKTData extends Command
     public function handle()
     {
         echo('All Ok');
-        $zk = new ZKTeco('192.168.1.153', 4370); // IP and port of the ZKT device
+        $zk = new ZKTeco('192.168.0.134', 4370); // IP and port of the ZKT device
 
         if ($zk->connect()) {
             $users = $zk->getUser(); // Method to fetch users (check library documentation)
 
+            // dd($users);
             foreach ($users as $user) {
                 User::updateOrCreate(
                     ['employee_id' => $user['userid']], // Assuming employee_id is unique
