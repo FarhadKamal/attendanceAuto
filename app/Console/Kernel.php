@@ -36,9 +36,16 @@ class Kernel extends ConsoleKernel
 
         //Dhaka
         $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('40 9 * * *');  // 9:40 PM
+        $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('30 10 * * *');  // 9:40 PM
         $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('55 9 * * *');  // 9:55: PM
+        $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('40 10 * * *');  // 9:55: PM
+
+        $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('00 12 * * *');  // 12:00 PM
+        $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('15 12 * * *');  // 12:15: PM
 
         $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('40 17 * * *');  // 5:40 PM
+        $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('40 18 * * *');  // 5:40 PM
+        $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('45 17 * * *');  // 6:45 PM
         $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('45 18 * * *');  // 6:45 PM
 
     }
