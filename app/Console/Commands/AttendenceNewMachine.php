@@ -173,17 +173,36 @@ class AttendenceNewMachine extends Command
 
         try {
             $existingLog = AttnOfficeInOutLog::where('employee_id', $userId)->whereDate('attendance_date', $date)->first();
+            $lateTime = $existingLog ? $this->calculateLateTime($userId, $date) : 0;
+            $earlyoutTime = $existingLog ? $this->calculateEarlyOutTime($userId, $date) : 0;
             if ($existingLog) {
-                $earlyoutTime = $this->calculateEarlyOutTime($userId, $date);
 
-                DB::table('attn_office_in_out_log')
-                ->where('employee_id', $userId)
-                ->whereDate('attendance_date', $date) // Ensure correct date format
-                ->update([
-                    'out_time' => $punchTime,
-                    'early_out_minute' => $earlyoutTime,
-                    'out_time_loc_id' => $loc_id,
-                ]);
+
+                if($existingLog->in_time<$punchTime)
+                {
+
+                    DB::table('attn_office_in_out_log')
+                    ->where('employee_id', $userId)
+                    ->whereDate('attendance_date', $date) // Ensure correct date format
+                    ->update([
+                        'in_time' => $punchTime,
+                        'late_in_minute' => $lateTime,
+                        'in_time_loc_id' => $loc_id,
+                    ]);
+
+                }
+                else{
+                    DB::table('attn_office_in_out_log')
+                    ->where('employee_id', $userId)
+                    ->whereDate('attendance_date', $date) // Ensure correct date format
+                    ->update([
+                        'out_time' => $punchTime,
+                        'early_out_minute' => $earlyoutTime,
+                        'out_time_loc_id' => $loc_id,
+                    ]);
+                }
+
+
 
                 // $existingLog->update([
                 //     'out_time' => $punchTime,
