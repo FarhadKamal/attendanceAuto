@@ -13,44 +13,44 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('fetch:sequential-attendance', ['time' => '10:30 AM'])->cron('30 10 * * *'); // 10:30 AM
-        $schedule->command('fetch:sequential-attendance', ['time' => '12:30 PM'])->cron('30 12 * * *'); // 12:30 PM
-        $schedule->command('fetch:sequential-attendance', ['time' => '17:30 PM'])->cron('30 12 * * *'); // 5:30 PM
-        $schedule->command('fetch:sequential-attendance', ['time' => '18:30 PM'])->cron('30 12 * * *'); // 6:30 PM
+        // $schedule->command('fetch:sequential-attendance', ['time' => '10:30 AM'])->cron('30 10 * * *'); // 10:30 AM
+        // $schedule->command('fetch:sequential-attendance', ['time' => '12:30 PM'])->cron('30 12 * * *'); // 12:30 PM
+        // $schedule->command('fetch:sequential-attendance', ['time' => '17:30 PM'])->cron('30 12 * * *'); // 5:30 PM
+        // $schedule->command('fetch:sequential-attendance', ['time' => '18:30 PM'])->cron('30 12 * * *'); // 6:30 PM
 
-        // //-------------------------------------- Check In- 9:30 AM---------------------------------------------//
-        // $schedule->command('fetch:attendance 192.168.1.155 4370')->cron('30 9 * * *'); // 9:30 AM
-        // $schedule->command('fetch:attendance 192.168.1.176 4370')->cron('30 9 * * *'); // 9:30 AM
-        // $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('30 9 * * *'); // 9:30 AM
-        // $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('30 9 * * *'); // 9:30 AM
+        //-------------------------------------- Check In- 9:30 AM---------------------------------------------//
+        $schedule->command('fetch:attendance 192.168.1.155 4370')->cron('30 9 * * *'); // 9:30 AM
+        $schedule->command('fetch:attendance 192.168.1.176 4370')->cron('40 9 * * *'); // 9:30 AM
+        $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('50 9 * * *'); // 9:30 AM
+        $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('0 10 * * *'); // 9:30 AM
 
-        // //-------------------------------------- Check In- 10:30 AM---------------------------------------------//
-        // $schedule->command('fetch:attendance 192.168.1.155 4370')->cron('30 10 * * *'); // 10:30 AM
-        // $schedule->command('fetch:attendance 192.168.1.176 4370')->cron('30 10 * * *'); // 10:30 AM
-        // $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('30 10 * * *');  // 10:30 AM
-        // $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('30 10 * * *'); // 10:30 AM
-
-
+        //-------------------------------------- Check In- 10:30 AM---------------------------------------------//
+        $schedule->command('fetch:attendance 192.168.1.155 4370')->cron('30 10 * * *'); // 10:30 AM
+        $schedule->command('fetch:attendance 192.168.1.176 4370')->cron('40 10 * * *'); // 10:30 AM
+        $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('50 10 * * *');  // 10:30 AM
+        $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('0 11 * * *'); // 10:30 AM
 
 
 
-        // //-------------------------------------- Check In- 12:30 AM---------------------------------------------//
-        // $schedule->command('fetch:attendance 192.168.1.155 4370')->cron('30 12 * * *'); // 12:30 AM
-        // $schedule->command('fetch:attendance 192.168.1.176 4370')->cron('30 12 * * *'); // 12:30 AM
-        // $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('30 12 * * *');  // 12:30 AM
-        // $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('30 12 * * *'); // 12:30 AM
 
 
-        // //-------------------------------------- Check Out- 05:30 PM---------------------------------------------//
-        // $schedule->command('fetch:attendance 192.168.1.155 4370')->cron('30 17 * * *'); // 05:30 PM
-        // $schedule->command('fetch:attendance 192.168.1.176 4370')->cron('30 17 * * *'); // 05:30 PM
-        // $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('30 17 * * *');  // 05:30 PM
-        // $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('30 17 * * *'); // 05:30 PM
-        // //-------------------------------------- Check Out- 06:30 PM---------------------------------------------//
-        // $schedule->command('fetch:attendance 192.168.1.155 4370')->cron('30 18 * * *'); // 06:30 PM
-        // $schedule->command('fetch:attendance 192.168.1.176 4370')->cron('30 18 * * *'); // 06:30 PM
-        // $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('30 18 * * *');  // 06:30 PM
-        // $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('30 18 * * *'); // 06:30 PM
+        //-------------------------------------- Check In- 12:30 AM---------------------------------------------//
+        $schedule->command('fetch:attendance 192.168.1.155 4370')->cron('20 12 * * *'); // 12:30 AM
+        $schedule->command('fetch:attendance 192.168.1.176 4370')->cron('30 12 * * *'); // 12:30 AM
+        $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('40 12 * * *');  // 12:30 AM
+        $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('50 12 * * *'); // 12:30 AM
+
+
+        //-------------------------------------- Check Out- 05:30 PM---------------------------------------------//
+        $schedule->command('fetch:attendance 192.168.1.155 4370')->cron('20 17 * * *'); // 05:30 PM
+        $schedule->command('fetch:attendance 192.168.1.176 4370')->cron('30 17 * * *'); // 05:30 PM
+        $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('40 17 * * *');  // 05:30 PM
+        $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('50 17 * * *'); // 05:30 PM
+        //-------------------------------------- Check Out- 06:30 PM---------------------------------------------//
+        $schedule->command('fetch:attendance 192.168.1.155 4370')->cron('20 18 * * *'); // 06:30 PM
+        $schedule->command('fetch:attendance 192.168.1.176 4370')->cron('30 18 * * *'); // 06:30 PM
+        $schedule->command('fetch:attendance 192.168.0.70 4370')->cron('40 18 * * *');  // 06:30 PM
+        $schedule->command('fetch:attendance 192.168.0.134 4370')->cron('50 18 * * *'); // 06:30 PM
 
 
 
